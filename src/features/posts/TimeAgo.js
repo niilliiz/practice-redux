@@ -1,17 +1,16 @@
 import React from 'react'
 import { parseISO, formatDistanceToNow } from 'date-fns'
 
-export const TimeAgo = ({ timeStamp }) => {
+export const TimeAgo = ({ timestamp }) => {
   let timeAgo = ''
-
-  if (timeStamp) {
-    const date = parseISO(timeStamp)
+  if (timestamp) {
+    const date = parseISO(timestamp)
     const timePeriod = formatDistanceToNow(date)
-    timeAgo = `${timePeriod}`
+    timeAgo = `${timePeriod} ago`
   }
 
   return (
-    <span title={timeStamp}>
+    <span title={timestamp}>
       &nbsp; <i>{timeAgo}</i>
     </span>
   )

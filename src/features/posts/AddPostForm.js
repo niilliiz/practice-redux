@@ -2,39 +2,39 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { addNewPost } from './postsSlice'
+import { selectAllUsers } from '../users/usersSlice'
 
 export const AddPostForm = () => {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
-  const [userID, setUserID] = useState('')
+  const [userId, setUserId] = useState('')
   const [addRequestStatus, setAddRequestStatus] = useState('idle')
 
   const dispatch = useDispatch()
+  const users = useSelector(selectAllUsers)
+
+  const onTitleChanged = (e) => setTitle(e.target.value)
+  const onContentChanged = (e) => setContent(e.target.value)
+  const onAuthorChanged = (e) => setUserId(e.target.value)
 
   const canSave =
-    [title, content, setUserID].every(Boolean) && addRequestStatus === 'idle'
+    [title, content, userId].every(Boolean) && addRequestStatus === 'idle'
 
-  const handleSavePost = async () => {
+  const onSavePostClicked = async () => {
     if (canSave) {
       try {
         setAddRequestStatus('pending')
-        await dispatch(addNewPost({ title, content, user: userID })).unwrap()
+        await dispatch(addNewPost({ title, content, user: userId })).unwrap()
         setTitle('')
         setContent('')
-        setUserID('')
+        setUserId('')
       } catch (err) {
-        console.log(err)
+        console.error('Failed to save the post: ', err)
       } finally {
         setAddRequestStatus('idle')
       }
     }
   }
-
-  const users = useSelector((state) => state.users)
-
-  const onTitleChanged = (e) => setTitle(e.target.value)
-  const onContentChanged = (e) => setContent(e.target.value)
-  const onAuthorChanged = (e) => setUserID(e.target.value)
 
   const usersOptions = users.map((user) => (
     <option key={user.id} value={user.id}>
@@ -51,11 +51,12 @@ export const AddPostForm = () => {
           type="text"
           id="postTitle"
           name="postTitle"
+          placeholder="What's on your mind?"
           value={title}
           onChange={onTitleChanged}
         />
         <label htmlFor="postAuthor">Author:</label>
-        <select id="postAuthor" value={userID} onChange={onAuthorChanged}>
+        <select id="postAuthor" value={userId} onChange={onAuthorChanged}>
           <option value=""></option>
           {usersOptions}
         </select>
@@ -66,7 +67,7 @@ export const AddPostForm = () => {
           value={content}
           onChange={onContentChanged}
         />
-        <button onClick={handleSavePost} type="button" disabled={!canSave}>
+        <button type="button" onClick={onSavePostClicked} disabled={!canSave}>
           Save Post
         </button>
       </form>

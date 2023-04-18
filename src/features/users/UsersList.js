@@ -6,8 +6,6 @@ import { selectAllUsers } from './usersSlice'
 export const UsersList = () => {
   const users = useSelector(selectAllUsers)
 
-  console.dir(users)
-
   const renderedUsers = users.map((user) => (
     <li key={user.id}>
       <Link to={`/users/${user.id}`}>{user.name}</Link>

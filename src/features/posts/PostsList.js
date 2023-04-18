@@ -1,21 +1,23 @@
 import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+
+import { Spinner } from '../../components/Spinner'
+import { PostAuthor } from './PostAuthor'
+import { TimeAgo } from './TimeAgo'
+import { ReactionButtons } from './ReactionButton'
 import {
   selectAllPosts,
   fetchPosts,
-  selectPostsIds,
-  selectedPostById,
+  selectPostIds,
+  selectPostById,
 } from './postsSlice'
-import { TimeAgo } from './timeAge'
-import { ReactionButtons } from './reactionButton'
-import { Spinner } from '../../components/Spinner'
-import { PostAuthor } from './postAuthor'
 
-function PostExcerpt({ postId }) {
-  const post = useSelector((state) => selectedPostById(state, postId))
+let PostExcerpt = ({ postId }) => {
+  const post = useSelector((state) => selectPostById(state, postId))
+
   return (
-    <article className="post-excerpt">
+    <article className="post-excerpt" key={post.id}>
       <h3>{post.title}</h3>
       <div>
         <PostAuthor userId={post.user} />
@@ -31,13 +33,13 @@ function PostExcerpt({ postId }) {
   )
 }
 
-export const PostsLists = () => {
+export const PostsList = () => {
   const dispatch = useDispatch()
-  const orderedPostIds = useSelector(selectPostsIds)
+  const orderedPostIds = useSelector(selectPostIds)
+
   const postStatus = useSelector((state) => state.posts.status)
   const error = useSelector((state) => state.posts.error)
 
-  console.dir(orderedPostIds)
   useEffect(() => {
     if (postStatus === 'idle') {
       dispatch(fetchPosts())
@@ -47,7 +49,7 @@ export const PostsLists = () => {
   let content
 
   if (postStatus === 'loading') {
-    content = <Spinner text="Loading" />
+    content = <Spinner text="Loading..." />
   } else if (postStatus === 'succeeded') {
     content = orderedPostIds.map((postId) => (
       <PostExcerpt key={postId} postId={postId} />
