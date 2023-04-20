@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const apiSlice = createApi({
-  reducePath: 'api',
+  reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: '/fakeApi' }),
   endpoints: (builder) => ({
     getPosts: builder.query({
