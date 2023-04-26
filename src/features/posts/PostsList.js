@@ -8,6 +8,8 @@ import { ReactionButtons } from './ReactionButton'
 
 import { useGetPostsQuery } from '../api/apiSlice'
 
+import classnames from 'classnames'
+
 function PostExcerpt({ post }) {
   return (
     <article className="post-excerpt" key={post.id}>
@@ -33,6 +35,7 @@ export function PostsList() {
     isSuccess,
     isError,
     error,
+    isFetching,
   } = useGetPostsQuery()
 
   const sortedPosts = useMemo(() => {
@@ -47,9 +50,14 @@ export function PostsList() {
   if (isLoading) {
     content = <Spinner text="Loading..." />
   } else if (isSuccess) {
-    content = sortedPosts.map((post) => (
+    const renderedPosts = sortedPosts.map((post) => (
       <PostExcerpt key={post.id} post={post} />
     ))
+    const containerClassname = classnames('posts-container', {
+      disabled: isFetching,
+    })
+
+    content = <div className={containerClassname}>{renderedPosts}</div>
   } else if (isError) {
     content = <div>{error.toString()}</div>
   }
