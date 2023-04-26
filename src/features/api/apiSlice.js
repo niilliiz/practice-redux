@@ -13,6 +13,4 @@ export const apiSlice = createApi({
   }),
 })
 
-console.dir(apiSlice)
-
 export const { useGetPostsQuery, useGetSinglePostQuery } = apiSlice

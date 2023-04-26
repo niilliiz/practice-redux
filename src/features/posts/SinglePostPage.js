@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { Spinner } from '../../components/Spinner'
+
 import { useGetSinglePostQuery } from '../api/apiSlice'
 
 import { PostAuthor } from './PostAuthor'
