@@ -1,26 +1,26 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-import { postUpdated, selectPostById } from './postsSlice'
+import { useEditPostMutation, useGetSinglePostQuery } from '../api/apiSlice'
 
 export const EditPostForm = ({ match }) => {
   const { postId } = match.params
 
-  const post = useSelector((state) => selectPostById(state, postId))
+  const { data: post } = useGetSinglePostQuery(postId)
+
+  const [editPost] = useEditPostMutation()
 
   const [title, setTitle] = useState(post.title)
   const [content, setContent] = useState(post.content)
 
-  const dispatch = useDispatch()
   const history = useHistory()
 
   const onTitleChanged = (e) => setTitle(e.target.value)
   const onContentChanged = (e) => setContent(e.target.value)
 
-  const onSavePostClicked = () => {
+  const onSavePostClicked = async () => {
     if (title && content) {
-      dispatch(postUpdated({ id: postId, title, content }))
+      await editPost({ id: postId, title, content })
       history.push(`/posts/${postId}`)
     }
   }
@@ -35,14 +35,14 @@ export const EditPostForm = ({ match }) => {
           id="postTitle"
           name="postTitle"
           placeholder="What's on your mind?"
-          value={title}
+          value={title || ''}
           onChange={onTitleChanged}
         />
         <label htmlFor="postContent">Content:</label>
         <textarea
           id="postContent"
           name="postContent"
-          value={content}
+          value={content || ''}
           onChange={onContentChanged}
         />
       </form>
