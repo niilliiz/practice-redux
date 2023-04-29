@@ -1,5 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 
+import logger from 'redux-logger'
+
 import postsReducer from '../features/posts/postsSlice'
 import notificationsReducer from '../features/notifications/notificationsSlice'
 
@@ -12,5 +14,6 @@ export default configureStore({
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiSlice.middleware),
+    getDefaultMiddleware().concat(apiSlice.middleware, logger),
+  devTools: process.env.NODE_ENV !== 'production',
 })
