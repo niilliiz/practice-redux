@@ -1,5 +1,4 @@
 import {
-  createSlice,
   createAsyncThunk,
   createEntityAdapter,
   createSelector,
