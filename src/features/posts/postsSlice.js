@@ -39,14 +39,6 @@ const postsSlice = createSlice({
         existingPost.reactions[reaction]++
       }
     },
-    postUpdated(state, action) {
-      const { id, title, content } = action.payload
-      const existingPost = state.entities[id]
-      if (existingPost) {
-        existingPost.title = title
-        existingPost.content = content
-      }
-    },
   },
   extraReducers(builder) {
     builder
@@ -66,7 +58,7 @@ const postsSlice = createSlice({
   },
 })
 
-export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions
+export const { postAdded, reactionAdded } = postsSlice.actions
 
 export default postsSlice.reducer
 
