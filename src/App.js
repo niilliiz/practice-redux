@@ -17,6 +17,8 @@ import { UserPage } from './features/users/UserPage'
 import { NotificationsList } from './features/notifications/NotificationsList'
 
 function App() {
+  // I'm calling u from myTest2
+
   return (
     <Router>
       <Navbar />
